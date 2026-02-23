@@ -46,12 +46,12 @@ class MyBot(commands.Bot):
 
     # TEST : TAPE !hello DANS DISCORD
     @commands.command()
-    async def "hello"(self, ctx):
+    async def "hello" (self, ctx):
         await ctx.send("Le bot fonctionne parfaitement et il t'écoute ! ✅")
 
     # COMMANDE MANUELLE : TAPE !meteo DANS DISCORD
     @commands.command()
-    async def "meteo"(self, ctx):
+    async def "meteo" (self, ctx):
         msg, img = self.get_random_meteo()
         embed = discord.Embed(title="Météo demandée", description=msg, color=0x3498db)
         embed.set_image(url=img)
@@ -70,5 +70,6 @@ class MyBot(commands.Bot):
 bot = MyBot()
 keep_alive()
 bot.run(TOKEN)
+
 
 
