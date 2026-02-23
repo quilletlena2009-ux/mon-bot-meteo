@@ -32,7 +32,7 @@ class MyBot(commands.Bot):
         # La tâche se lancera chaque jour à 09:00:00 (Heure UTC par défaut)
         self.weather_task.start()
 
-    @tasks.loop(time=datetime.time(hour=9, minute=0, second=0))
+    @tasks.loop(time=datetime.time(hour=8, minute=0, second=0))
     async def weather_task(self):
         channel = self.get_channel(CHANNEL_ID)
         if channel:
