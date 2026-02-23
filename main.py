@@ -6,6 +6,7 @@ import os
 from flask import Flask
 from threading import Thread
 
+# --- SERVEUR POUR GARDER LE BOT ALLUMÉ ---
 app = Flask('')
 @app.route('/')
 def home(): 
@@ -17,20 +18,23 @@ def run():
 def keep_alive():
     t = Thread(target=run)
     t.start()
--
+
+# --- CONFIGURATION DU BOT ---
 TOKEN = os.getenv('TOKEN')
 CHANNEL_ID = 1422958632395341875
 
 class MyBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
-        intents.message_content = True  
+        intents.message_content = True  # CRUCIAL pour lire tes commandes
         super().__init__(command_prefix="!", intents=intents)
 
     async def setup_hook(self):
+        # Lance la météo automatique au démarrage
         if not self.weather_task.is_running():
             self.weather_task.start()
 
+    # MÉTÉO AUTOMATIQUE (8h00 du matin)
     @tasks.loop(time=datetime.time(hour=8, minute=0, second=0))
     async def weather_task(self):
         channel = self.get_channel(CHANNEL_ID)
@@ -40,10 +44,12 @@ class MyBot(commands.Bot):
             embed.set_image(url=img)
             await channel.send(embed=embed)
 
+    # TEST : TAPE !hello DANS DISCORD
     @commands.command()
     async def hello(self, ctx):
         await ctx.send("Le bot fonctionne parfaitement et il t'écoute ! ✅")
 
+    # COMMANDE MANUELLE : TAPE !meteo DANS DISCORD
     @commands.command()
     async def meteo(self, ctx):
         msg, img = self.get_random_meteo()
