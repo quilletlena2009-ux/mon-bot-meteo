@@ -8,34 +8,43 @@ from threading import Thread
 
 app = Flask('')
 @app.route('/')
-def home(): return "Bot en ligne !"
-def run(): app.run(host='0.0.0.0', port=8080)
+def home(): 
+    return "Bot en ligne !"
+
+def run(): 
+    app.run(host='0.0.0.0', port=8080)
+
 def keep_alive():
     t = Thread(target=run)
     t.start()
-
+-
 TOKEN = os.getenv('TOKEN')
 CHANNEL_ID = 1422958632395341875
 
 class MyBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
-        intents.message_content = True
+        intents.message_content = True  
         super().__init__(command_prefix="!", intents=intents)
 
     async def setup_hook(self):
-        self.weather_task.start()
+        if not self.weather_task.is_running():
+            self.weather_task.start()
 
     @tasks.loop(time=datetime.time(hour=8, minute=0, second=0))
     async def weather_task(self):
         channel = self.get_channel(CHANNEL_ID)
         if channel:
             msg, img = self.get_random_meteo()
-            embed = discord.Embed(title="Météo du jour", description=msg, color=0x3498db)
+            embed = discord.Embed(title="Météo du jour à Poudlard", description=msg, color=0x3498db)
             embed.set_image(url=img)
             await channel.send(embed=embed)
 
-    @commands.command(name="meteo")
+    @commands.command()
+    async def hello(self, ctx):
+        await ctx.send("Le bot fonctionne parfaitement et il t'écoute ! ✅")
+
+    @commands.command()
     async def meteo(self, ctx):
         msg, img = self.get_random_meteo()
         embed = discord.Embed(title="Météo demandée", description=msg, color=0x3498db)
