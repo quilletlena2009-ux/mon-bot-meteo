@@ -70,3 +70,4 @@ class MyBot(commands.Bot):
 bot = MyBot()
 keep_alive()
 bot.run(TOKEN)
+
