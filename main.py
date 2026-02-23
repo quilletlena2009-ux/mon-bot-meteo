@@ -21,7 +21,7 @@ def keep_alive():
 
 # --- CONFIGURATION DU BOT ---
 TOKEN = os.getenv('TOKEN') 
-CHANNEL_ID = 1234567890 # <--- N'oublie pas de mettre ton ID ici
+CHANNEL_ID = 1422958632395341875 # <--- N'oublie pas de mettre ton ID ici
 
 class MyBot(commands.Bot):
     def __init__(self):
